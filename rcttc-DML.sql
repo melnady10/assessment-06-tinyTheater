@@ -32,12 +32,6 @@ select distinct s.show_id, rd.`date`, rd.ticket_price, t.theater_id
     inner join theater t on rd.theater = t.theater_name;
     
     select * from performance;
-    
--- insert into ticket (customer_id, performance_id, seat_name)   
-  select distinct c.customer_id, p.performance_id, rd.seat
-	 from rcttc_data rd
-      inner join customer c on rd.customer_first = c.first_name
-   inner join performance p on rd.`date` = p.show_date;
        
     
 insert into ticket (customer_id, performance_id, seat_name) 
@@ -45,14 +39,15 @@ insert into ticket (customer_id, performance_id, seat_name)
 	 from rcttc_data rd
      inner join customer c on rd.customer_first = c.first_name
     inner join performance p on rd.ticket_price = p.price and rd.date = p.show_date;
-   --  where performance_id = 5;
-    
+  
     select * from ticket;
     
     
 		-- updates 
        
-       set sql_safe_updates = 0;
+set sql_safe_updates = 0;
+
+-- first update
 select s.title, p.show_date, p.price, p.performance_id
 	from performance p
 	inner join shows s on p.show_id = s.show_id
@@ -63,16 +58,34 @@ select s.title, p.show_date, p.price, p.performance_id
     where performance_id = 5;
  
 	
-     -- something is wrong. seat numbers don't match ticket numbers
+ -- second update    
  select c.first_name, c.last_name, t.seat_name, p.performance_id, p.show_date, p.price, ticket_id
  from ticket t
  inner join customer c on t.customer_id = c.customer_id
  inner join performance p on t.performance_id = p.performance_id
  where p.performance_id = 5
-  order by t.seat_name;
+order by t.seat_name;
+  
+ update ticket
+ set seat_name = 'A4' 
+ where ticket_id = 94;
  
- select * from performance where performance_id = 5;
+update ticket 
+set seat_name ='A2' 
+where ticket_id = 101;
+
+update ticket 
+set seat_name ='C2' 
+where ticket_id = 100;
  
+update ticket 
+set seat_name ='B4' 
+where ticket_id = 98;
+ 
+ select * from ticket where performance_id = 5;
+ 
+ 
+-- third update 
 select * from customer where phone = '801-514-8648';
   
 update customer 
@@ -82,17 +95,23 @@ select * from customer where customer_id = 48;
 
 
 -- deletes
-	
-    -- first delete not complete
-select th.theater_name, p.performance_id, t.ticket_id, t.customer_id
-from ticket;
-
-select * from rcttc_data where theater = '10 pin';
-
-select t.ticket_id, t.customer_id, p.performance_id, p.theater_id 
+ 
+ select c.first_name, c.last_name, t.customer_id, p.performance_id, ticket_id
  from ticket t
+ inner join customer c on t.customer_id = c.customer_id
  inner join performance p on t.performance_id = p.performance_id
  where p.theater_id =1;
+ 
+delete from ticket where ticket_id =25;
+delete from ticket where ticket_id =26;
+delete from ticket where ticket_id =29;
+delete from ticket where ticket_id =41;
+delete from ticket where ticket_id =50;
+delete from ticket where ticket_id =51;
+delete from ticket where ticket_id =59;
+delete from ticket where ticket_id =67;
+delete from ticket where ticket_id =68;
+ 
 
 select * from customer where first_name = 'liv';
 delete from ticket where customer_id = 65; 
